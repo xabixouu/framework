@@ -1,0 +1,24 @@
+<div id="" class="modal modal-large" data-bind="modal: showModal">
+	<div class="modal-content" data-bind="with: creating">
+		<h4>{lang('general.title')}</h4>
+
+		<div class="row">
+			<div class="col s12">
+				<form>
+					<!-- Put your form here -->
+
+					<div class="step-actions init">
+						<span class="waves-effect waves-light btn green" data-bind="click: $root.save.bind($data)">
+							{lang('general.forms.save')}
+						</span>
+						<span class="waves-effect waves-green btn-flat" data-bind="click: $root.closeModal.bind($data)">
+							{lang('general.close')}
+						</span>
+					</div>
+
+
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

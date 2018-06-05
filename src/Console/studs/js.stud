@@ -1,0 +1,194 @@
+function BUNDLENAME(item, $parent){
+	var self = this;
+
+	self.id = ko.observable(item.id || 0);
+	self.name = ko.observable(item.name || '');
+}
+
+function ViewModelBUNDLENAME(data){
+	var self = this;
+
+	// Default Options
+	self.options = {
+		"host": "",
+		"langs": {}
+	};
+
+	// Extend options to model
+	$.extend(true, self.options, data);
+	self.langs = self.options.langs;
+
+	self.datas = ko.observableArray([]);
+
+	AlphaFilter.call(self);
+	self.initAlpha([]);
+
+
+	// FILTER BY NAME
+		// Search input
+		self.searchBar	= ko.observable('');
+
+		/**
+		 * Event keyup on input filter
+		 */
+		self.startQuery = function(){
+			if (self.searchBar() == ""){
+				self.currentPageIndex(0);
+				self.alphaSelected(self.alphaAll());
+			}
+			// return true needed to propagate event
+			return true;
+		}
+
+		/**
+		 * Filter companies with input value
+		 */
+		self.filteredQuery = ko.computed(function(){
+			return ko.utils.arrayFilter(self.datas(), function(item) {
+				return (item.name().toLowerCase().indexOf(
+					self.searchBar().toLowerCase()
+				) !== -1);
+			});
+		}, self);
+	// __END_FILTER_BY_NAME
+
+	// FILTER BY FIRST LETTER
+		/**
+		 * Event ALPHA letter clicked
+		 */
+		self.alphaClick = function(data){
+			self.currentPageIndex(0);
+			self.alphaSelected(data);
+		}
+	// __END_FILTER_BY_FIRST_LETTER
+
+	// GLOBAL
+
+		/**
+		 * Get an array of filtered companies
+		 */
+		self.filteredDatas = ko.computed(function(){
+			if (self.alphaSelected().type() == "all"){
+				return self.filteredQuery();
+			}
+			else{
+				self.searchBar('');
+				return ko.utils.arrayFilter(self.filteredQuery(), function(item) {
+					if (self.alphaSelected().name() == "0-9"){
+						return (item.name().toLowerCase().match(/^[0-9]/));
+					}
+					return (item.name().toLowerCase().indexOf(self.alphaSelected().name().toLowerCase()) === 0)
+				});
+			}
+		}, self);
+	// __END_GLOBAL
+
+	// PAGINATION SYSTEM
+		Pagination.call(self);
+	// __END_PAGINATION_SYSTEM
+
+
+	// Contact Observable
+	self.creating = ko.observable(null);
+
+	/**
+	 * Get Contacts from backend
+	 */
+	self.get = function(){
+		$.ajax({
+			url: self.options.host + "/bundlename/get",
+			method: "POST",
+			data: {},
+			dataType: "JSON",
+			beforeSend: function(){
+				self.datas([]);
+			}
+		}).done(function(response){
+			self.datas(
+				$.map(response, function(item) {
+					return new BUNDLENAME(item, self);
+				})
+			);
+			self.initAlpha([]);
+		});
+	}
+
+	/**
+	 * Init App View Model
+	 */
+	self.init = function(){
+		// Get contacts
+		self.get();
+	}
+
+	/**
+	 * Click on create button
+	 * @return {[type]} [description]
+	 */
+	self.showModal = ko.observable(false);
+	self.createModal = function(){
+		self.creating((new BUNDLENAME({}, self)));
+		self.showModal(true);
+	}
+
+	self.editModal = function(current){
+		self.creating(current);
+		self.showModal(true);
+	}
+
+	self.closeModal = () => {
+		self.showModal(false);
+	}
+
+
+	/**
+	 * Click on createModal save
+	 * @return {[type]} [description]
+	 */
+	self.save = function(){
+		console.log('save');
+	}
+}
+
+// BINDING HANDLERS
+
+// Dropdowns
+ko.bindingHandlers.materializeDropdown = {
+	init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
+		$(element).dropdown(valueAccessor().options);
+	},
+	update: function(element, valueAccessor, allBindings) {
+	}
+};
+
+// Modals
+ko.bindingHandlers.modal = {
+	init: function (element, valueAccessor) {
+		console.log(valueAccessor);
+		$(element).modal({
+			// show: false,
+			dismissible: false
+		});
+
+		var value = valueAccessor();
+		if (typeof value === 'function') {
+			$(element).on('hide.bs.modal', function() {
+				value(false);
+			});
+		}
+
+		ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
+		   $(element).modal("destroy");
+		});
+
+	},
+	update: function (element, valueAccessor) {
+		var value = valueAccessor();
+		if (ko.utils.unwrapObservable(value)) {
+			$(element).modal('open');
+		}
+		else {
+			$(element).modal('close');
+		}
+	}
+}

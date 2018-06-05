@@ -1,0 +1,26 @@
+<?php
+
+namespace DummyNamespace;
+
+use Xabi\Databases\ModelTrait;
+
+/**
+* DummyModel
+*/
+class DummyModel {
+	use ModelTrait {
+		ModelTrait::__construct as private __model_construct;
+	}
+
+	public function __construct($_instance){
+		$this->__model_construct($_instance);
+
+		// This is the default table used by your model
+		// Based on the bundle name
+		$this->_instance->table = 'DummyName';
+	}
+
+	/*--------------------------------------------------|
+	| You can add your personal methods below this line |
+	|---------------------------------------------------*/
+}

@@ -1,0 +1,28 @@
+<tr>
+    <td data-bind="text: id"></td>
+	<td data-bind="text: name"></td>
+    <td>
+        <ul data-bind="attr: { id: 'dropdown' + $index() }" class='dropdown-content'>
+			<li>
+				<a data-bind="click: $root.editModal.bind($data)" title="{lang('general.forms.edit')}">
+					{lang('general.forms.edit')}
+				</a>
+			</li>
+        </ul>
+
+        <span class="dropdown-button btn-flat btn-floating right"
+            data-bind="
+            attr: {
+                'data-activates': 'dropdown' + $index()
+            },
+            materializeDropdown: {
+                options: {
+                    hover: false,
+                    belowOrigin: true,
+                    constrainWidth: false
+                }
+            }">
+            <i class="material-icons black-text">more_vert</i>
+        </span>
+    </td>
+</tr>

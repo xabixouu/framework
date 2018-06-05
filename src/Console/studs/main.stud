@@ -1,0 +1,91 @@
+{extends layout_path('content.tpl')}
+
+{block name='icon'}person{/block}
+{block name='title'}test{/block}
+
+{block name='searchBar'}
+
+	<div class="input-field col s5 right" data-bind="visible: datas().length">
+		<input id="icon_prefix" type="text" class="validate searchBar" data-bind="textInput: searchBar, event: { keydown: startQuery }">
+		<label for="icon_prefix" class="searchBar">
+			<i class="material-icons prefix left">search</i> find
+		</label>
+	</div>
+{/block}
+
+{block name='content'}
+
+	<div class="row" data-bind="visible: datas().length">
+		<div class="col s12">
+			<button class="right btn-flat green white-text" data-bind="click: createModal">add</button>
+		</div>
+	</div>
+
+	{include layout_path('alpha-filter.tpl')}
+
+	<div class="row" style="padding-top:30px;" data-bind="visible: datas().length">
+		<div class="col s12">
+			<table>
+				<thead>
+					<tr>
+						<th></th>
+						<th>{lang('general.forms.name')}</th>
+						<th>{lang('general.forms.email')}</th>
+						<th>{lang('general.forms.phone')}</th>
+						<th>{lang('general.forms.jobPosition')}</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody id="bodySearchbar" data-bind="foreach: listDatas">
+					{include src_path('BUNDLENAME/views/listing/tableBody.tpl')}
+				</tbody>
+			</table>
+		</div>
+		{include layout_path('pagination.tpl')}
+	</div>
+
+	<div class="row" style="padding-top:30px;" data-bind="visible: !datas().length">
+		<div class="col s12 center">
+			<h5>empty</h5>
+			<button class="btn-flat green white-text" data-bind="click: createModal">
+				add
+			</button>
+		</div>
+	</div>
+
+	{include src_path('BUNDLENAME/views/listing/createModal.tpl')}
+
+{/block}
+
+{block name='jsBlock'}
+<link href="/libraries/sweet-alert/sweetalert.css" rel="stylesheet" type="text/css" />
+<link href="/libraries/stepper/stepper.min.css" rel="stylesheet" type="text/css" >
+<script src="/js/autoloader.js" type="text/javascript" charset="utf-8"></script>
+
+
+<script>
+	$(function(){
+		var scripts = [
+			"/libraries/sweet-alert/sweetalert.min.js",
+			"/libraries/jquery-validation/jquery.validate.min.js",
+			"/libraries/stepper/stepper.min.js",
+			"/js/knockout-alpha-filter.js",
+			"/js/knockout-pagination.js",
+			"/js/bundlename/View.js"
+		];
+		$.loadScripts(scripts).done(function() {
+
+			var viewDatas = {
+				"host": "{$HOST}",
+				"langs": {$langs},
+				'pageSize': 10
+			};
+
+			window.App	= new ViewModelBUNDLENAME(viewDatas);
+			ko.applyBindings(window.App);
+			App.init();
+
+		});
+	});
+</script>
+{/block}

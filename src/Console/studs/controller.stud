@@ -1,0 +1,67 @@
+<?php
+
+namespace DummyNamespace;
+
+use DummyInclude;
+
+/**
+* DummyController
+*/
+class DummyController extends DummyCName {
+
+	function __construct() {
+		parent::__construct("DummyName");
+	}
+
+	/**
+	* @api {PUBLIC} index DESCRIPTION
+	*
+	* @apiName index
+	* @apiGroup DummyName
+	* @apiVersion 1.0.0
+	*
+	* @apiDescription DESCR
+	* @rights/index/SMALL_DESC/FULL_DESC
+	**/
+	public function index(){
+		$data['langs'] = json_encode([
+			'general' => lang('general'),
+			'DummyLower' => lang('DummyLower')
+		]);
+		return $this->display('listing/main', $data);
+	}
+
+	/**
+	* @api {PUBLIC} save DESCRIPTION
+	*
+	* @apiName save
+	* @apiGroup DummyName
+	* @apiVersion 1.0.0
+	*
+	* @apiDescription DESCR
+	* @rights/save/SMALL_DESC/FULL_DESC
+	**/
+	public function save(){
+		dd($this->postData);
+	}
+
+	/**
+	* @api {PUBLIC} get DESCRIPTION
+	*
+	* @apiName get
+	* @apiGroup DummyName
+	* @apiVersion 1.0.0
+	*
+	* @apiDescription DESCR
+	* @rights/get/SMALL_DESC/FULL_DESC
+	**/
+	public function get(){
+		$test = [
+			[
+				'id' => 1,
+				'name' => 'DummyName'
+			]
+		];
+		return $this->json($test);
+	}
+}
