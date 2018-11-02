@@ -98,9 +98,9 @@ abstract class Controller {
 	/**
 	 * Response JSON.
 	 */
-	public function json($datas = []) {
+	public function json($datas = [], $status = 200) {
 
-		return $this->render->json($datas);
+		return $this->render->json($datas, $status);
 	}
 
 	/**

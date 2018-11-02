@@ -121,11 +121,14 @@ class Render {
 	/**
 	 * Return json encoded response
 	 */
-	public function json($datas = []) {
+	public function json($datas = [], $status = 200) {
 
 		$this->response->setContent(
 			$datas
 		);
+
+		$this->response->setStatusCode($status);
+
 		return $this->response;
 	}
 

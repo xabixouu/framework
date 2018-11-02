@@ -1,6 +1,23 @@
 # Changelog
 
 
+## [v0.2.7]
+### Tag
+`0.2.7`
+
+### Date
+November 2nd, 2018
+
+### Changes
+* Response json now takes second optional argument to set statusCode
+
+### Additions
+* None
+
+### Removals
+* None
+
+
 ## [v0.2.6]
 ### Tag
 `0.2.6`
