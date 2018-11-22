@@ -77,6 +77,7 @@ class Render {
 	 * Display view with layout
 	 */
 	public function display($view, $datas = []) {
+		$this->response		= new Response();
 		if (count($datas)){
 			$this->variables = array_merge($this->variables, $datas);
 		}
@@ -93,6 +94,7 @@ class Render {
 	 * Fetch view
 	 */
 	public function fetch($view, $datas = []) {
+		$this->response		= new Response();
 		if (count($datas)){
 			$this->variables = array_merge($this->variables, $datas);
 		}
@@ -109,6 +111,7 @@ class Render {
 	 * Fetch view
 	 */
 	public function fetchHTML($view, $datas = []) {
+		$this->response		= new Response();
 		if (count($datas)){
 			$this->variables = array_merge($this->variables, $datas);
 		}
@@ -122,6 +125,7 @@ class Render {
 	 * Return json encoded response
 	 */
 	public function json($datas = [], $status = 200) {
+		$this->response		= new Response();
 
 		$this->response->setContent(
 			$datas
@@ -136,6 +140,7 @@ class Render {
 	 * Return file response
 	 */
 	public function file(string $file) {
+		$this->response		= new Response();
 
 		$response = new BinaryFileResponse($file);
 		$response->trustXSendfileTypeHeader();

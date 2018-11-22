@@ -1,6 +1,23 @@
 # Changelog
 
 
+## [v0.2.8]
+### Tag
+`0.2.8`
+
+### Date
+November 2nd, 2018
+
+### Changes
+* Initialise a new Response each call to Renderer
+
+### Additions
+* None
+
+### Removals
+* None
+
+
 ## [v0.2.7]
 ### Tag
 `0.2.7`
